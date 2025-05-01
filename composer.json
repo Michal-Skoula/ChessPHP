@@ -1,0 +1,18 @@
+{
+    "name": "michal/chess",
+    "description": "The game of chess written in php",
+    "type": "project",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Chess\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Michal Škoula",
+            "email": "michal@skoula.com"
+        }
+    ],
+    "require": {}
+}
