@@ -2,7 +2,7 @@
 
 namespace Chess\Domain\Piece\Entity;
 
-class Knight extends AbstractPiece
+class Knight extends Piece
 {
 	// Info
 	public string $name = "Horsey";

@@ -4,7 +4,7 @@ namespace Chess\Domain\Piece\Entity;
 
 use Chess\Domain\Piece\Interface\SpecialMoves;
 
-class King extends AbstractPiece implements SpecialMoves
+class King extends Piece implements SpecialMoves
 {
 	// Info
 	public string $name = "King";

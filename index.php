@@ -27,7 +27,7 @@ $layout = [
 ];
 
 try {
-	$board = new ChessBoard($layout, 30);
+	$board = new ChessBoard($layout);
 	visualize($board, true);
 }
 catch (MaxBoardSizeException $e) {

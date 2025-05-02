@@ -4,7 +4,7 @@ namespace Chess\Domain\Board\Service;
 
 
 use Chess\Domain\Piece\Exception\InvalidPieceException;
-use Chess\Domain\Piece\ValueObject\Enums\Piece;
+use Chess\Domain\Piece\ValueObject\Enums\PieceType;
 
 /**
  * Interprets chars representing pieces into their respective class string based on the `Piece` enum definitions
@@ -20,7 +20,7 @@ class LayoutCharParser
 	 */
 	public function getType(): string
 	{
-		return Piece::tryFrom(strtolower($this->char))
+		return PieceType::tryFrom(strtoupper($this->char))
 				?->getClass()
 				?? throw new InvalidPieceException("Invalid piece char: $this->char. Defaulting to null.");
 	}

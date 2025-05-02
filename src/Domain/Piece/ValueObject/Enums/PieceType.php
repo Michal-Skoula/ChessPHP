@@ -9,14 +9,14 @@ use Chess\Domain\Piece\Entity\Pawn;
 use Chess\Domain\Piece\Entity\Queen;
 use Chess\Domain\Piece\Entity\Rook;
 
-enum Piece: string
+enum PieceType: string
 {
-	case ROOK = 'r';
-	case PAWN = 'p';
-	case KNIGHT = 'n';
-	case BISHOP = 'b';
-	case QUEEN = 'q';
-	case KING = 'k';
+	case ROOK = 'R';
+	case PAWN = 'P';
+	case KNIGHT = 'N';
+	case BISHOP = 'B';
+	case QUEEN = 'Q';
+	case KING = 'K';
 	case EMPTY = '_';
 
 	public function getClass(): string

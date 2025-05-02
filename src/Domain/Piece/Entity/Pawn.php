@@ -2,11 +2,11 @@
 
 namespace Chess\Domain\Piece\Entity;
 
-use Chess\Domain\Piece\Entity\AbstractPiece;
+use Chess\Domain\Piece\Entity\Piece;
 use Chess\Domain\Piece\Interface\SpecialAttackMoves;
 use Chess\Domain\Piece\Interface\SpecialMoves;
 
-class Pawn extends AbstractPiece implements SpecialAttackMoves, SpecialMoves
+class Pawn extends Piece implements SpecialAttackMoves, SpecialMoves
 {
 	// Info
 	public string $name = "Pawn";

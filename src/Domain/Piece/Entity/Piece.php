@@ -4,7 +4,7 @@ namespace Chess\Domain\Piece\Entity;
 use Chess\Domain\Piece\Service\GetMoveFromCoordsNotation;
 use Chess\Domain\Piece\Service\GetMoveFromAlgebraicNotation;
 
-abstract class AbstractPiece
+abstract class Piece
 {
 	// Info
 	public string $name = "Unlabeled piece";

@@ -4,7 +4,7 @@ namespace Chess\Domain\Board\Entity;
 
 use Chess\Domain\Board\Exception\MaxBoardSizeException;
 use Chess\Domain\Board\Service\LayoutCharParser;
-use Chess\Domain\Piece\Entity\AbstractPiece;
+use Chess\Domain\Piece\Entity\Piece;
 use Chess\Domain\Piece\Exception\InvalidPieceException;
 use Chess\Infrastructure\Logging\Logger;
 use Chess\Infrastructure\Logging\LogLevel;
@@ -57,7 +57,7 @@ class ChessBoard
 				$char = $layout[$r][$c];
 
 				if($char) {
-					$square->piece = self::getPieceFromChar($char);
+					$square->setPiece(self::getPieceFromChar($char));
 				}
  			}
 		}
@@ -79,7 +79,7 @@ class ChessBoard
 		return $this->playArea[$row - 1][$col - 1];
 	}
 
-	protected static function getPieceFromChar(string $char): ?AbstractPiece
+	protected static function getPieceFromChar(string $char): ?Piece
 	{
 		$parser = new LayoutCharParser($char);
 

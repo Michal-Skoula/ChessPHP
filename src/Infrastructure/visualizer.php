@@ -25,7 +25,7 @@ if (! function_exists('visualize')) {
 
 			for ($c = 1; $c <= $board->rows; $c++) {
 				$square = $board->getSquare($r, $c);
-				$piece = $square->piece;
+				$piece = $square->getPiece();
 
 				echo ($piece ? $piece->icon[$piece->color] : ' ') . ' '; // Pieces
 			}

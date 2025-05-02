@@ -3,7 +3,7 @@
 namespace Chess\Domain\Board\Entity;
 
 use Chess\Domain\Board\Service\ColNumberToChar;
-use Chess\Domain\Piece\Entity\AbstractPiece;
+use Chess\Domain\Piece\Entity\Piece;
 
 class Square
 {
@@ -25,14 +25,7 @@ class Square
 	/**
 	 * Piece currently on the square. Can also be `null`, meaning an empty square.
 	 */
-	protected ?AbstractPiece $piece = null {
-		get {
-			return $this->piece;
-		}
-		set {
-			$this->piece = $value;
-		}
-	}
+	protected ?Piece $piece = null;
 
 	public function __construct(int $row, int $col)
 	{
@@ -56,6 +49,16 @@ class Square
 
 	public function getAlgebraicRow(): int {
 		return $this->algebraic[1];
+	}
+
+	public function getPiece(): ?Piece
+	{
+		return $this->piece;
+	}
+
+	public function setPiece(?Piece $piece): void
+	{
+		$this->piece = $piece;
 	}
 
 }
