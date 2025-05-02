@@ -8,7 +8,7 @@ abstract class AbstractPiece
 {
 	public string $name;
 	public int $value;
-	public string $icon;
+	public string $icon = 'x';
 	public string $color;
 
 	protected array $moves;

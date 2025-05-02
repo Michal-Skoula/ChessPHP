@@ -1,8 +1,12 @@
 <?php
 
+use Chess\Domain\Board\BoardException;
 use Chess\Domain\Board\Entity\ChessBoard;
+use Chess\Infrastructure\Logging\Logger;
+use Chess\Infrastructure\LogLevel;
 
 require_once __DIR__ . '/vendor/autoload.php';
+require_once __DIR__ . '/src/Infrastructure/helpers.php';
 
 
 /**
@@ -22,8 +26,11 @@ $layout = [
 	['R','N','B','Q','K','B','N','R'],
 ];
 
+try {
+	$board = new ChessBoard($layout);
 
-
-$board = new ChessBoard($layout);
-
-var_dump($board->board);
+	visualize($board, false);
+}
+catch (BoardException $e) {
+	Logger::log($e->getMessage(), LogLevel::ERROR);
+}

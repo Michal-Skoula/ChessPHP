@@ -2,39 +2,34 @@
 
 namespace Chess\Domain\Board\Service;
 
-use Chess\Domain\Piece\Entity\Bishop;
-use Chess\Domain\Piece\Entity\King;
-use Chess\Domain\Piece\Entity\Knight;
-use Chess\Domain\Piece\Entity\Pawn;
-use Chess\Domain\Piece\Entity\Queen;
-use Chess\Domain\Piece\Entity\Rook;
+
+use Chess\Domain\Board\BoardException;
+use Chess\Domain\Piece\ValueObject\Piece;
 
 /**
- * Interprets chars representing pieces into their respective class string
+ * Interprets chars representing pieces into their respective class string based on the `Piece` enum definitions
  */
 class LayoutCharParser
 {
-	public function __construct(public string $char)
-	{}
+	public function __construct(
+		public string $char
+	) {}
 
+	/**
+	 * @throws BoardException
+	 */
 	public function getType(): string
 	{
-		return match(strtolower($this->char)) {
-			'r' => Rook::class,
-			'b' => Bishop::class,
-			'n' => Knight::class,
-			'q' => Queen::class,
-			'k' => King::class,
-			'p' => Pawn::class,
-			'_' => 'Empty',
-			default => new \Exception('Invalid piece: ' . $this->char),
-		};
+		return Piece::tryFrom(strtolower($this->char))
+				?->getClass()
+				?? throw new BoardException("Invalid piece char: $this->char");
 	}
 
 	/**
 	 * Determines if the piece is white or black.
-	 * White pieces use a capital letter (`C`)
-	 * Black pieces use a lowercase letter (`c)`
+	 *
+	 * White pieces use a capital letter (`R`),
+	 * black pieces use a lowercase letter (`r`)
 	 *
 	 * @return string Either `white` or `black`
 	 */
