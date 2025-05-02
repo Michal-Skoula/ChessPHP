@@ -8,13 +8,14 @@ use Chess\Domain\Piece\Entity\AbstractPiece;
 class Square
 {
 	/**
-	 * Piece coordinates in chess notation, e.g. `'e4'`
+	 * Piece coordinates in algebraic notation, e.g. `'e4'`
 	 */
-	public readonly string $chess;
+	public readonly string $algebraic;
+
 	/**
-	 * Piece coordinates in algebraic notation, e.g. `[7,4]`
+	 * Piece coordinates in coordinate notation, e.g. `[8,4]. Indexes start at 1.`
 	 */
-	public readonly array $algebraic;
+	public readonly array $coords;
 
 	/**
 	 * Id of the square, counting from the top left corner `[a1 => id=1]`
@@ -24,7 +25,7 @@ class Square
 	/**
 	 * Piece currently on the square. Can also be `null`, meaning an empty square.
 	 */
-	public ?AbstractPiece $piece = null {
+	protected ?AbstractPiece $piece = null {
 		get {
 			return $this->piece;
 		}
@@ -39,22 +40,22 @@ class Square
 		static $id = 1;
 		$this->id = $id; $id++;
 
-		// Chess notation
-		$columnChar = ColNumberToChar::convert($col);
-		$rowInt = $row+1;
-		$this->chess = "{$columnChar}{$rowInt}";
-
 		// Algebraic notation
-		$this->algebraic = ['r' => $row, 'c' => $col];
+		$columnChar = ColNumberToChar::convert($col);
+		$rowInt = $row + 1;
+		$this->algebraic = "{$columnChar}{$rowInt}";
+
+		// Coordinates notation
+		$this->coords = ['r' => $row, 'c' => $col];
 	}
 
-	public function getChessNotationColumn(): string
+	public function getAlgebraicColumn(): string
 	{
-		return $this->chess[0];
+		return $this->algebraic[0];
 	}
 
-	public function getChessNotationRow(): int {
-		return $this->chess[1];
+	public function getAlgebraicRow(): int {
+		return $this->algebraic[1];
 	}
 
 }

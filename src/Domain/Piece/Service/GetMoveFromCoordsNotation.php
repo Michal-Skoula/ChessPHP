@@ -2,9 +2,9 @@
 
 namespace Chess\Domain\Piece\Service;
 
-use Chess\Domain\Piece\ValueObject\Move;
+use Chess\Domain\Move\Entity\Move;
 
-class GetMoveFromArrayNotation
+class GetMoveFromCoordsNotation
 {
 	public static function convert($move): Move
 	{

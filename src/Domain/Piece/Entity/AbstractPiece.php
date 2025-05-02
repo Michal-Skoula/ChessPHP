@@ -1,8 +1,8 @@
 <?php
 
 namespace Chess\Domain\Piece\Entity;
-use Chess\Domain\Piece\Service\GetMoveFromArrayNotation;
-use Chess\Domain\Piece\Service\GetMoveFromChessNotation;
+use Chess\Domain\Piece\Service\GetMoveFromCoordsNotation;
+use Chess\Domain\Piece\Service\GetMoveFromAlgebraicNotation;
 
 abstract class AbstractPiece
 {
@@ -72,8 +72,8 @@ abstract class AbstractPiece
 	public function play(string|array $play)
 	{
 		$move = match(gettype($play)) {
-			'string' => GetMoveFromChessNotation::convert($play),
-			'array' => GetMoveFromArrayNotation::convert($play),
+			'string' => GetMoveFromAlgebraicNotation::convert($play),
+			'array' => GetMoveFromCoordsNotation::convert($play),
 		};
 
 		if(! $move->isValid()) {
