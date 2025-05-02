@@ -1,13 +1,16 @@
 <?php
 
 namespace Chess\Domain\Piece\Entity;
-use Chess\Domain\Piece\Service\GetMoveFromCoordsNotation;
-use Chess\Domain\Piece\Service\GetMoveFromAlgebraicNotation;
+
+use Chess\Domain\Piece\Exception\InvalidPieceException;
+use Chess\Domain\Piece\ValueObject\Enums\PieceType;
 
 abstract class Piece
 {
 	// Info
 	public string $name = "Unlabeled piece";
+	public PieceType $type = PieceType::EMPTY;
+	public string $char;
 	public int $value = 0;
 	public array $icon = [
 		'white' => '🞎',
@@ -67,23 +70,34 @@ abstract class Piece
 		if($this->attackMoves = []) {
 			$this->attackMoves = $this->moves;
 		}
+
+		$this->type = $this->getType();
+		$this->char = $this->type->value;
 	}
 
-	public function play(string|array $play)
+	public function isType(PieceType ...$types): bool
 	{
-		$move = match(gettype($play)) {
-			'string' => GetMoveFromAlgebraicNotation::convert($play),
-			'array' => GetMoveFromCoordsNotation::convert($play),
-		};
-
-		if(! $move->isValid()) {
-			echo 'Move is invalid';
-		}
-
-		if($move->isPawnPromotion()) {
-
-		}
+		return array_any($types, fn($type) => $type === $this->getType());
 	}
- }
 
- // TODO: when implementing move logic, invert the $col value for black
+	public static function make(PieceType $type, string $color): ?Piece
+	{
+		$pieceType = $type->getClass();
+
+		return $pieceType != "Empty"
+			? new $pieceType($color)
+			: null;
+	}
+
+	protected function getType(): ?PieceType
+	{
+		try {
+			$type = PieceType::getTypeFromClass($this);
+		}
+		catch(InvalidPieceException) {
+			$type = null;
+		}
+
+		return $type;
+	}
+}

@@ -2,6 +2,7 @@
 
 use Chess\Domain\Board\Entity\ChessBoard;
 use Chess\Domain\Board\Exception\MaxBoardSizeException;
+use Chess\Domain\Piece\ValueObject\Enums\PieceType;
 use Chess\Infrastructure\Logging\Logger;
 use Chess\Infrastructure\Logging\LogLevel;
 

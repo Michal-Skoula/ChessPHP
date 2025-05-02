@@ -4,6 +4,7 @@ namespace Chess\Domain\Board\Entity;
 
 use Chess\Domain\Board\Service\ColNumberToChar;
 use Chess\Domain\Piece\Entity\Piece;
+use Chess\Domain\Piece\ValueObject\Enums\PieceType;
 
 class Square
 {
@@ -42,16 +43,31 @@ class Square
 		$this->coords = ['r' => $row, 'c' => $col];
 	}
 
-	public function getAlgebraicColumn(): string
+	public function column($coords = false): string
 	{
-		return $this->algebraic[0];
+		return $coords
+			? $this->coords['c']
+			: $this->algebraic[0];
 	}
 
-	public function getAlgebraicRow(): int {
-		return $this->algebraic[1];
+	public function row($coords = false): int
+	{
+		return $coords
+			? $this->coords['r']
+			: $this->algebraic[1];
 	}
 
-	public function getPiece(): ?Piece
+	public function isOccupied(): bool
+	{
+		return is_subclass_of($this->piece(), Piece::class);
+	}
+
+	public function isCheckingEnemyKing(): bool
+	{
+		return false; //TODO: finish logic for enemy being checked
+	}
+
+	public function piece(): ?Piece
 	{
 		return $this->piece;
 	}

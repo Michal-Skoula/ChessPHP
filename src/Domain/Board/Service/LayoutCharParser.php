@@ -18,11 +18,11 @@ class LayoutCharParser
 	/**
 	 * @throws InvalidPieceException
 	 */
-	public function getType(): string
+	public function getType(): PieceType
 	{
-		return PieceType::tryFrom(strtoupper($this->char))
-				?->getClass()
-				?? throw new InvalidPieceException("Invalid piece char: $this->char. Defaulting to null.");
+		return PieceType::tryFrom(strtoupper($this->char)) ?? throw new InvalidPieceException (
+			"Invalid piece char: $this->char. Defaulting to null."
+		);
 	}
 
 	/**

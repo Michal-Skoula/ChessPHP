@@ -6,6 +6,7 @@ use Chess\Domain\Board\Exception\MaxBoardSizeException;
 use Chess\Domain\Board\Service\LayoutCharParser;
 use Chess\Domain\Piece\Entity\Piece;
 use Chess\Domain\Piece\Exception\InvalidPieceException;
+use Chess\Domain\Piece\ValueObject\Enums\PieceType;
 use Chess\Infrastructure\Logging\Logger;
 use Chess\Infrastructure\Logging\LogLevel;
 
@@ -84,12 +85,7 @@ class ChessBoard
 		$parser = new LayoutCharParser($char);
 
 		try {
-			$pieceType = $parser->getType();
-
-			return $pieceType !== 'Empty'
-				? new $pieceType(color: $parser->getColor())
-				: null;
-
+			return Piece::make($parser->getType(), $parser->getColor());
 		}
 		catch(InvalidPieceException $e) {
 			Logger::log($e->getMessage(), LogLevel::WARNING);

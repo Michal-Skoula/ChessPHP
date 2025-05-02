@@ -2,19 +2,35 @@
 
 namespace Chess\Domain\Move\Entity;
 
+use Chess\Domain\Board\Entity\Square;
+use Chess\Domain\Move\Service\ConvertMoveToAlgebraicNotation;
+use Chess\Domain\Piece\Entity\Piece;
+use Chess\Domain\Piece\ValueObject\Enums\PieceType;
+
+/**
+ * Stores a particular move
+ */
 final class Move
 {
-	public function isValid(): bool
-	{
+	public string $algebraicNotation;
+	public string $movedBy;
+	public Square $from;
+	public Square $to;
+	public PieceType $pieceMoved;
+	public ?PieceType $pieceCaptured;
 
-		// is not checked
-		// does not cause discovered check
-		// is in bounds of the chess board
-		return true;
-	}
-
-	public function isPawnPromotion(): bool
+	public function __construct(Square $from, Square $to)
 	{
-		return false;
+		$this->from = $from;
+		$this->to = $to;
+		$this->movedBy = $from->piece()->color;
+
+		$this->pieceMoved = $from->piece()->type;
+		$this->pieceCaptured = $to->piece()->type;
+
+		$this->from->setPiece(null);
+		$this->to->setPiece(Piece::make($this->pieceMoved, $this->movedBy));
+
+		$this->algebraicNotation = ConvertMoveToAlgebraicNotation::convert($this->pieceMoved, $from, $to);
 	}
 }

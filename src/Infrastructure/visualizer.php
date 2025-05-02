@@ -9,7 +9,7 @@ if (! function_exists('visualize')) {
 		if($detailed) {
 			echo "\n   ";
 			for($c = 1; $c <= $board->cols; $c++) {
-				echo " {$board->getSquare(col: $c)->getAlgebraicColumn()}";
+				echo " {$board->getSquare(col: $c)->column()}";
 			}
 			echo "\n    ";
 			for($c = 1; $c <= $board->cols; $c++) {
@@ -20,12 +20,12 @@ if (! function_exists('visualize')) {
 		for ($r = 1; $r <= $board->rows; $r++) {
 			// Left border
 			echo $detailed
-				? "\n {$board->getSquare(row: $r)->getAlgebraicRow()} |"
+				? "\n {$board->getSquare(row: $r)->row()} |"
 				: "\n ";
 
 			for ($c = 1; $c <= $board->rows; $c++) {
 				$square = $board->getSquare($r, $c);
-				$piece = $square->getPiece();
+				$piece = $square->piece();
 
 				echo ($piece ? $piece->icon[$piece->color] : ' ') . ' '; // Pieces
 			}
