@@ -1,8 +1,8 @@
 <?php
 
-namespace Domain\Piece\Service;
+namespace Chess\Domain\Piece\Service;
 
-use Domain\Piece\ValueObject\Move;
+use Chess\Domain\Piece\ValueObject\Move;
 
 class GetMoveFromChessNotation
 {

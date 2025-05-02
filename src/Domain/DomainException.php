@@ -2,4 +2,6 @@
 
 namespace Chess\Domain;
 
-abstract class DomainException extends \Exception {}
+use Exception;
+
+abstract class DomainException extends Exception {}

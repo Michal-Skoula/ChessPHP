@@ -2,7 +2,6 @@
 
 namespace Chess\Domain\Board\Entity;
 
-use Chess\Domain\Board\Exception\BoardException;
 use Chess\Domain\Board\Exception\MaxBoardSizeException;
 use Chess\Domain\Board\Service\LayoutCharParser;
 use Chess\Domain\Piece\Entity\AbstractPiece;

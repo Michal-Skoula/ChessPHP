@@ -1,6 +1,6 @@
 <?php
 
-namespace Domain\Piece\ValueObject;
+namespace Chess\Domain\Piece\ValueObject;
 
 final class Move
 {

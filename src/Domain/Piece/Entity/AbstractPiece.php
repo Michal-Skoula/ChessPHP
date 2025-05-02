@@ -1,8 +1,8 @@
 <?php
 
 namespace Chess\Domain\Piece\Entity;
-use Domain\Piece\Service\GetMoveFromArrayNotation;
-use Domain\Piece\Service\GetMoveFromChessNotation;
+use Chess\Domain\Piece\Service\GetMoveFromArrayNotation;
+use Chess\Domain\Piece\Service\GetMoveFromChessNotation;
 
 abstract class AbstractPiece
 {

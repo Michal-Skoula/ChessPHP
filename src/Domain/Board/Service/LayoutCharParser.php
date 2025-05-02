@@ -4,7 +4,7 @@ namespace Chess\Domain\Board\Service;
 
 
 use Chess\Domain\Piece\Exception\InvalidPieceException;
-use Chess\Domain\Piece\ValueObject\Piece;
+use Chess\Domain\Piece\ValueObject\Enums\Piece;
 
 /**
  * Interprets chars representing pieces into their respective class string based on the `Piece` enum definitions

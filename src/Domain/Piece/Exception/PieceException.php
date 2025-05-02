@@ -2,7 +2,9 @@
 
 namespace Chess\Domain\Piece\Exception;
 
-class PieceException extends \DomainException
+use DomainException;
+
+class PieceException extends DomainException
 {
 
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Chess\Domain\Piece\ValueObject;
+namespace Chess\Domain\Piece\ValueObject\Enums;
 
 use Chess\Domain\Piece\Entity\Bishop;
 use Chess\Domain\Piece\Entity\King;
@@ -18,7 +18,6 @@ enum Piece: string
 	case QUEEN = 'q';
 	case KING = 'k';
 	case EMPTY = '_';
-
 
 	public function getClass(): string
 	{

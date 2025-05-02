@@ -6,7 +6,7 @@ use Chess\Infrastructure\Logging\Logger;
 use Chess\Infrastructure\Logging\LogLevel;
 
 require_once __DIR__ . '/vendor/autoload.php';
-require_once __DIR__.'/src/Infrastructure/visualizer.php';
+require_once __DIR__ . '/src/Infrastructure/visualizer.php';
 
 
 /**
@@ -27,7 +27,7 @@ $layout = [
 ];
 
 try {
-	$board = new ChessBoard($layout);
+	$board = new ChessBoard($layout, 30);
 	visualize($board, true);
 }
 catch (MaxBoardSizeException $e) {
