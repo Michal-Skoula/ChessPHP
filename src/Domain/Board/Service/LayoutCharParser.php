@@ -4,6 +4,7 @@ namespace Chess\Domain\Board\Service;
 
 
 use Chess\Domain\Board\BoardException;
+use Chess\Domain\Piece\InvalidPieceException;
 use Chess\Domain\Piece\ValueObject\Piece;
 
 /**
@@ -16,13 +17,13 @@ class LayoutCharParser
 	) {}
 
 	/**
-	 * @throws BoardException
+	 * @throws InvalidPieceException
 	 */
 	public function getType(): string
 	{
 		return Piece::tryFrom(strtolower($this->char))
 				?->getClass()
-				?? throw new BoardException("Invalid piece char: $this->char");
+				?? throw new InvalidPieceException("Invalid piece char: $this->char. Defaulting to null.");
 	}
 
 	/**

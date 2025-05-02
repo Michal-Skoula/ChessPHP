@@ -19,8 +19,10 @@ if (! function_exists('visualize')) {
 				: "\n "; // Left border
 
 			for ($c = 0; $c < $board->rows; $c++) {
-				$square = $board->board[$r][$c];
-				echo ($square ? $square->icon : ' ') . ' '; // Piece icons
+				$square = $board->playArea[$r][$c];
+				$piece = $square->piece;
+
+				echo ($piece ? $piece->icon : ' ') . ' '; // Piece icons
 			}
 		}
 		echo "\n\n";

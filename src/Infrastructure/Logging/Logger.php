@@ -11,7 +11,7 @@ class Logger
 	{
 		//TODO: Implement proper logging
 
-		echo "<$level->value>: " . $message . "\n";
+		echo "<$level->value> " . $message . "\n";
 
 	}
 }

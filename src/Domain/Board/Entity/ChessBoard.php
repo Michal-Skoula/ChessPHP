@@ -4,14 +4,22 @@ namespace Chess\Domain\Board\Entity;
 
 use Chess\Domain\Board\BoardException;
 use Chess\Domain\Board\Service\LayoutCharParser;
+use Chess\Domain\Piece\Entity\AbstractPiece;
+use Chess\Domain\Piece\InvalidPieceException;
 use Chess\Infrastructure\Logging\Logger;
 use Chess\Infrastructure\LogLevel;
 
 class ChessBoard
 {
+	/**
+	 * @var array{'r': int, 'c': int}
+	 */
 	protected array $maxArea = ['r' => 16, 'c' => 16];
 
-	public array $board = [];
+	/**
+	 * @var array<int, array<int, Square>>
+	 */
+	public array $playArea = [];
 	public readonly int $rows, $cols;
 
 	/**
@@ -21,8 +29,7 @@ class ChessBoard
 	{
 		if($rows > $this->maxArea['r'] || $cols > $this->maxArea['c']) {
 			throw new BoardException(message:
-				"Board size is too large: $rows x $cols. 
-				Maximum allowed size is {$this->maxArea['r']} x {$this->maxArea['c']}"
+				"Board size is too large: $rows x $cols. Maximum allowed size is {$this->maxArea['r']} x {$this->maxArea['c']}"
 			);
 		}
 
@@ -38,23 +45,33 @@ class ChessBoard
 		for($r = 0; $r < $this->rows; $r++){
 			for($c = 0; $c < $this->cols; $c++)
 			{
-				if(! $layout[$r][$c]) $this->board[$r][$c] = null;
+				$square = new Square($r, $c);
+				$this->playArea[$r][$c] = $square;
 
 				$char = $layout[$r][$c];
-				$parser = new LayoutCharParser($char);
 
-				try {
-					$pieceType = $parser->getType();
+				if($char) {
+					$square->piece = self::getPieceFromChar($char);
 				}
-				catch(BoardException $e) {
-					Logger::log($e->getMessage(), LogLevel::WARNING);
-					$pieceType = 'Empty';
-				}
-
-				$this->board[$r][$c] = ($pieceType === 'Empty')
-					? null
-					: new $pieceType(color: $parser->getColor());
  			}
+		}
+	}
+
+	protected static function getPieceFromChar(string $char): ?AbstractPiece
+	{
+		$parser = new LayoutCharParser($char);
+
+		try {
+			$pieceType = $parser->getType();
+
+			return $pieceType !== 'Empty'
+				? new $pieceType(color: $parser->getColor())
+				: null;
+
+		}
+		catch(InvalidPieceException $e) {
+			Logger::log($e->getMessage(), LogLevel::WARNING);
+			return null;
 		}
 	}
 }
