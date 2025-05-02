@@ -2,33 +2,40 @@
 
 namespace Chess\Domain\Board\Entity;
 
-use Chess\Domain\Board\BoardException;
+use Chess\Domain\Board\Exception\BoardException;
+use Chess\Domain\Board\Exception\MaxBoardSizeException;
 use Chess\Domain\Board\Service\LayoutCharParser;
 use Chess\Domain\Piece\Entity\AbstractPiece;
-use Chess\Domain\Piece\InvalidPieceException;
+use Chess\Domain\Piece\Exception\InvalidPieceException;
 use Chess\Infrastructure\Logging\Logger;
-use Chess\Infrastructure\LogLevel;
+use Chess\Infrastructure\Logging\LogLevel;
 
 class ChessBoard
 {
 	/**
+	 * Max chessboard size for custom board. The limit is 25,
+	 * as there are no more chars to use in the ASCII alphabet.
+	 *
 	 * @var array{'r': int, 'c': int}
 	 */
-	protected array $maxArea = ['r' => 16, 'c' => 16];
+	final array $maxArea = ['r' => 25, 'c' => 25];
 
 	/**
+	 * Stores the game state
+	 *
 	 * @var array<int, array<int, Square>>
 	 */
 	public array $playArea = [];
-	public readonly int $rows, $cols;
+	public readonly int $rows;
+	public readonly int $cols;
 
 	/**
-	 * @throws BoardException
+	 * @throws MaxBoardSizeException
 	 */
 	public function __construct(array $layout, int $rows = 8, int $cols = 8)
 	{
 		if($rows > $this->maxArea['r'] || $cols > $this->maxArea['c']) {
-			throw new BoardException(message:
+			throw new MaxBoardSizeException(message:
 				"Board size is too large: $rows x $cols. Maximum allowed size is {$this->maxArea['r']} x {$this->maxArea['c']}"
 			);
 		}
@@ -55,6 +62,22 @@ class ChessBoard
 				}
  			}
 		}
+	}
+
+	/**
+	 * Returns a square from the chessboard.
+	 *
+	 * NOTE: indexes start from 1 !!
+	 *
+	 * Example: `a1 => [row= 1, col= 1]`
+	 *
+	 * @param  int  $row
+	 * @param  int  $col
+	 * @return Square
+	 */
+	public function getSquare(int $row = 1, int $col = 1): Square
+	{
+		return $this->playArea[$row - 1][$col - 1];
 	}
 
 	protected static function getPieceFromChar(string $char): ?AbstractPiece

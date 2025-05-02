@@ -1,6 +1,6 @@
 <?php
 
-namespace Chess\Infrastructure;
+namespace Chess\Infrastructure\Logging;
 
 enum LogLevel: string
 {

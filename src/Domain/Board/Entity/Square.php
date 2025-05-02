@@ -2,9 +2,10 @@
 
 namespace Chess\Domain\Board\Entity;
 
+use Chess\Domain\Board\Service\ColNumberToChar;
 use Chess\Domain\Piece\Entity\AbstractPiece;
 
-final class Square
+class Square
 {
 	/**
 	 * Piece coordinates in chess notation, e.g. `'e4'`
@@ -23,7 +24,14 @@ final class Square
 	/**
 	 * Piece currently on the square. Can also be `null`, meaning an empty square.
 	 */
-	public ?AbstractPiece $piece = null;
+	public ?AbstractPiece $piece = null {
+		get {
+			return $this->piece;
+		}
+		set {
+			$this->piece = $value;
+		}
+	}
 
 	public function __construct(int $row, int $col)
 	{
@@ -32,15 +40,21 @@ final class Square
 		$this->id = $id; $id++;
 
 		// Chess notation
-		$this->chess = 'ChessNotation'; //TODO
+		$columnChar = ColNumberToChar::convert($col);
+		$rowInt = $row+1;
+		$this->chess = "{$columnChar}{$rowInt}";
 
 		// Algebraic notation
 		$this->algebraic = ['r' => $row, 'c' => $col];
 	}
 
-	public function setPiece(AbstractPiece $piece): void
+	public function getChessNotationColumn(): string
 	{
-		$this->piece = $piece;
+		return $this->chess[0];
+	}
+
+	public function getChessNotationRow(): int {
+		return $this->chess[1];
 	}
 
 }

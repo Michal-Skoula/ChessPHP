@@ -1,12 +1,12 @@
 <?php
 
-use Chess\Domain\Board\BoardException;
 use Chess\Domain\Board\Entity\ChessBoard;
+use Chess\Domain\Board\Exception\MaxBoardSizeException;
 use Chess\Infrastructure\Logging\Logger;
-use Chess\Infrastructure\LogLevel;
+use Chess\Infrastructure\Logging\LogLevel;
 
 require_once __DIR__ . '/vendor/autoload.php';
-require_once __DIR__ . '/src/Infrastructure/helpers.php';
+require_once __DIR__.'/src/Infrastructure/visualizer.php';
 
 
 /**
@@ -28,9 +28,9 @@ $layout = [
 
 try {
 	$board = new ChessBoard($layout);
-
-	visualize($board, false);
+	visualize($board, true);
 }
-catch (BoardException $e) {
+catch (MaxBoardSizeException $e) {
 	Logger::log($e->getMessage(), LogLevel::ERROR);
 }
+

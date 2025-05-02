@@ -1,6 +1,6 @@
 <?php
 
-namespace Chess\Domain\Board;
+namespace Chess\Domain\Board\Exception;
 
 use Chess\Domain\DomainException;
 

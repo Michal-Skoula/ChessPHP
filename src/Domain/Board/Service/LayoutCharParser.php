@@ -3,8 +3,7 @@
 namespace Chess\Domain\Board\Service;
 
 
-use Chess\Domain\Board\BoardException;
-use Chess\Domain\Piece\InvalidPieceException;
+use Chess\Domain\Piece\Exception\InvalidPieceException;
 use Chess\Domain\Piece\ValueObject\Piece;
 
 /**

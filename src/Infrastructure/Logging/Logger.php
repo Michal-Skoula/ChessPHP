@@ -2,7 +2,6 @@
 
 namespace Chess\Infrastructure\Logging;
 
-use Chess\Infrastructure\LogLevel;
 use Stringable;
 
 class Logger
