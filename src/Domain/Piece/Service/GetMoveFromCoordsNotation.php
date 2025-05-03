@@ -6,7 +6,7 @@ use Chess\Domain\Move\Entity\Move;
 
 class GetMoveFromCoordsNotation
 {
-//	public static function convert($move): Move
+//	public static function toChar($move): Move
 //	{
 //		return new Move();
 //	}

@@ -21,8 +21,8 @@ class Promotion
 	public function promote(PieceType $promoteTo): Piece
 	{
 		if($this->canPromote()) {
-			$pieceClass = $promoteTo->getClass();
-			$piece = Piece::make($promoteTo, $this->move->movedBy);
+			$pieceClass = $promoteTo->getClassString();
+			$piece = Piece::make($promoteTo, $this->move->movedBy, true);
 
 			$this->move->to->setPiece($piece);
 			return $piece;

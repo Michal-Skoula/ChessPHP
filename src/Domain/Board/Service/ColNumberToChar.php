@@ -10,8 +10,13 @@ class ColNumberToChar
 	protected static int $startOfAsciiLowercaseAlphabet = 97;
 	protected static int $lettersInAsciiAlphabet = 25;
 
-	public static function convert(int $num): string
+	public static function toChar(int $num): string
 	{
 		return sprintf("%c", self::$startOfAsciiLowercaseAlphabet + $num);
+	}
+
+	public static function toInt(string $char): int
+	{
+		return ord($char) - self::$startOfAsciiLowercaseAlphabet + 1;
 	}
 }

@@ -6,7 +6,7 @@ use Chess\Domain\Move\Entity\Move;
 
 class GetMoveFromAlgebraicNotation
 {
-//	public static function convert(string $algebraic): Move
+//	public static function toChar(string $algebraic): Move
 //	{
 //		return new Move();
 //	}

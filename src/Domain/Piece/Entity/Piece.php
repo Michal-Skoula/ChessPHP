@@ -89,16 +89,19 @@ abstract class Piece
 		return array_any($types, fn($type) => $type === $this->getType());
 	}
 
-	public static function make(PieceType $type, string $color): Piece
+	public static function make(PieceType $type, string $color, bool $strict = false): ?Piece
 	{
 		/** @var class-string<Piece> $pieceType */
-		$pieceType = $type->getClass();
+		$pieceType = $type->getClassString();
 
-		if($pieceType == "Empty") {
+		if($strict && $pieceType == "Empty") {
 			throw new InvalidPieceTypeException("Trying to create piece from invalid PieceType $pieceType.");
+
 		}
 
-		return new $pieceType($color);
+		return $pieceType != "Empty"
+			? new $pieceType($color)
+			: null;
 	}
 
 	protected function getType(): ?PieceType

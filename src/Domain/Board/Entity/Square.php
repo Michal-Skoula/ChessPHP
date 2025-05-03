@@ -16,9 +16,9 @@ class Square
 	/**
 	 * Piece coordinates in coordinate notation, e.g. `[8,4]. Indexes start at 1.`
 	 *
-	 * @var array{'r':int,'c':int} $coords
+	 * @var Coordinate $coords
 	 */
-	public readonly array $coords;
+	public readonly Coordinate $coords;
 
 	/**
 	 * ID of the square, counting from the top left corner `[a1 => id=1]`
@@ -37,25 +37,25 @@ class Square
 		$this->id = $id; $id++;
 
 		// Algebraic notation
-		$columnChar = ColNumberToChar::convert($col);
-		$rowInt = $row + 1;
+		$columnChar = ColNumberToChar::toChar($col - 1);
+		$rowInt = $row;
 		$this->algebraic = "{$columnChar}{$rowInt}";
 
 		// Coordinates notation
-		$this->coords = ['r' => $row, 'c' => $col];
+		$this->coords = new Coordinate($row, $col);
 	}
 
 	public function column(bool $coords = false): string|int
 	{
 		return $coords
-			? $this->coords['c']
+			? $this->coords->col
 			: $this->algebraic[0];
 	}
 
 	public function row(bool $coords = false): string|int
 	{
 		return $coords
-			? $this->coords['r']
+			? $this->coords->row
 			: $this->algebraic[1];
 	}
 
@@ -82,4 +82,18 @@ class Square
 		$this->piece = $piece;
 	}
 
+	public function getCoords(): Coordinate
+	{
+		return $this->coords;
+	}
+
+	/**
+	 * @return string Gives a formatted piece name. If the Square is empty, returns string `Empty`.
+	 */
+	public function pieceName(): string
+	{
+		return $this->piece
+			? $this->piece()->name
+			: 'Empty';
+	}
 }

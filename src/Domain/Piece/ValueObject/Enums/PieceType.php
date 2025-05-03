@@ -43,7 +43,7 @@ enum PieceType: string
 		}
 		throw new InvalidPieceException("Unknown piece: $piece->name. Register the piece in the PieceType enum.");
 	}
-	public function getClass(): string
+	public function getClassString(): string
 	{
 		return match ($this) {
 			self::ROOK => Rook::class,
