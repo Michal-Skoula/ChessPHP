@@ -2,11 +2,11 @@
 
 namespace Chess\Domain\Piece\ValueObject\Enums;
 
+use Chess\Domain\Piece\Entity\Piece;
 use Chess\Domain\Piece\Entity\Bishop;
 use Chess\Domain\Piece\Entity\King;
 use Chess\Domain\Piece\Entity\Knight;
 use Chess\Domain\Piece\Entity\Pawn;
-use Chess\Domain\Piece\Entity\Piece;
 use Chess\Domain\Piece\Entity\Queen;
 use Chess\Domain\Piece\Entity\Rook;
 use Chess\Domain\Piece\Exception\InvalidPieceException;
@@ -41,7 +41,7 @@ enum PieceType: string
 				return $case;
 			}
 		}
-		throw new InvalidPieceException("Unknown piece: {$piece->name}. Register the piece in the PieceType enum.");
+		throw new InvalidPieceException("Unknown piece: $piece->name. Register the piece in the PieceType enum.");
 	}
 	public function getClass(): string
 	{
@@ -53,7 +53,6 @@ enum PieceType: string
 			self::QUEEN => Queen::class,
 			self::KING => King::class,
 			self::EMPTY => "Empty",
-			default => throw new InvalidPieceException("Unknown piece type")
 		};
 	}
 }

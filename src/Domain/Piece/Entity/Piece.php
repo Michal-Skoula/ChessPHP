@@ -3,15 +3,20 @@
 namespace Chess\Domain\Piece\Entity;
 
 use Chess\Domain\Piece\Exception\InvalidPieceException;
+use Chess\Domain\Piece\Exception\InvalidPieceTypeException;
 use Chess\Domain\Piece\ValueObject\Enums\PieceType;
 
 abstract class Piece
 {
 	// Info
 	public string $name = "Unlabeled piece";
-	public PieceType $type = PieceType::EMPTY;
+	public PieceType $type;
 	public string $char;
 	public int $value = 0;
+
+	/**
+	 * @var array{'white': string, 'black': string}
+	 */
 	public array $icon = [
 		'white' => '🞎',
 		'black' => '■'
@@ -37,7 +42,7 @@ abstract class Piece
 	 *
 	 * If empty, it is the same as `$moves`.
 	 */
-	protected array $attackMoves = [];
+	protected array $attackMoves;
 
 	/**
 	 * Amount of times each move can be repeated. `-1` for infinite
@@ -67,8 +72,12 @@ abstract class Piece
 	{
 		$this->color = $color;
 
-		if($this->attackMoves = []) {
+		if($this->attackMoves == []) {
 			$this->attackMoves = $this->moves;
+		}
+
+		if($this->getType() == null) {
+			throw new InvalidPieceTypeException("Unable to create piece from unknown piece type: {$this->getType()}.");
 		}
 
 		$this->type = $this->getType();
@@ -80,13 +89,16 @@ abstract class Piece
 		return array_any($types, fn($type) => $type === $this->getType());
 	}
 
-	public static function make(PieceType $type, string $color): ?Piece
+	public static function make(PieceType $type, string $color): Piece
 	{
+		/** @var class-string<Piece> $pieceType */
 		$pieceType = $type->getClass();
 
-		return $pieceType != "Empty"
-			? new $pieceType($color)
-			: null;
+		if($pieceType == "Empty") {
+			throw new InvalidPieceTypeException("Trying to create piece from invalid PieceType $pieceType.");
+		}
+
+		return new $pieceType($color);
 	}
 
 	protected function getType(): ?PieceType

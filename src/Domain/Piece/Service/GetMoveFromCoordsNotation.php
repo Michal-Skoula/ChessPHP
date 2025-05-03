@@ -6,8 +6,8 @@ use Chess\Domain\Move\Entity\Move;
 
 class GetMoveFromCoordsNotation
 {
-	public static function convert($move): Move
-	{
-		return new Move();
-	}
+//	public static function convert($move): Move
+//	{
+//		return new Move();
+//	}
 }

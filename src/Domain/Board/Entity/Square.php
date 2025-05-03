@@ -15,11 +15,13 @@ class Square
 
 	/**
 	 * Piece coordinates in coordinate notation, e.g. `[8,4]. Indexes start at 1.`
+	 *
+	 * @var array{'r':int,'c':int} $coords
 	 */
 	public readonly array $coords;
 
 	/**
-	 * Id of the square, counting from the top left corner `[a1 => id=1]`
+	 * ID of the square, counting from the top left corner `[a1 => id=1]`
 	 */
 	public readonly int $id;
 
@@ -43,14 +45,14 @@ class Square
 		$this->coords = ['r' => $row, 'c' => $col];
 	}
 
-	public function column($coords = false): string
+	public function column(bool $coords = false): string|int
 	{
 		return $coords
 			? $this->coords['c']
 			: $this->algebraic[0];
 	}
 
-	public function row($coords = false): int
+	public function row(bool $coords = false): string|int
 	{
 		return $coords
 			? $this->coords['r']
@@ -59,6 +61,9 @@ class Square
 
 	public function isOccupied(): bool
 	{
+		if(! $this->piece()) {
+			return false;
+		}
 		return is_subclass_of($this->piece(), Piece::class);
 	}
 

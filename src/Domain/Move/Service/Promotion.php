@@ -22,7 +22,7 @@ class Promotion
 	{
 		if($this->canPromote()) {
 			$pieceClass = $promoteTo->getClass();
-			$piece = new $pieceClass(color: $this->move->to->piece()->color);
+			$piece = Piece::make($promoteTo, $this->move->movedBy);
 
 			$this->move->to->setPiece($piece);
 			return $piece;

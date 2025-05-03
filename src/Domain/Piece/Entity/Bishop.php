@@ -2,9 +2,6 @@
 
 namespace Chess\Domain\Piece\Entity;
 
-/**
- * {@inheritDoc}
- */
 class Bishop extends Piece
 {
 	// Info

@@ -16,8 +16,8 @@ class ConvertMoveToAlgebraicNotation
 	{
 		if ($pieceType == PieceType::PAWN) {
 			return $from->column() != $to->column()        	// If the column changes, it must be a capture
-				? "{$to->column()}x{$to->algebraic}"    	// Capture or en passant
-				: "{$to->algebraic}";                      	// Move
+				? "{$to->column()}x$to->algebraic"    	// Capture or en passant
+				: "$to->algebraic";                      	// Move
 		}
 		else {
 			if ($to->isOccupied()) {
@@ -27,13 +27,13 @@ class ConvertMoveToAlgebraicNotation
 					$multiplePiecesOnTheSameFile = false;
 
 					if($multiplePiecesOnTheSameFile) {
-						return "{$pieceType->value}{$to->row()}x{$to->algebraic}"; // Bc4xe6
+						return "$pieceType->value{$to->row()}x{$to->algebraic}"; // Bc4xe6
 					}
-					else return "{$pieceType->value}{$to->column()}x{$to->algebraic}";
+					else return "$pieceType->value{$to->column()}x{$to->algebraic}";
 
-				} else return "{$pieceType->value}x{$to->algebraic}";
+				} else return "{$pieceType->value}x$to->algebraic";
 
-			} else return "{$pieceType->value}{$to->algebraic}";
+			} else return "$pieceType->value$to->algebraic";
 		}
 	}
 }

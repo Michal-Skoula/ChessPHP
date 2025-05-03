@@ -30,6 +30,9 @@ class ChessBoard
 	public readonly int $cols;
 
 	/**
+	 * @param  array<array<string>>  $layout
+	 * @param  int  $rows
+	 * @param  int  $cols
 	 * @throws MaxBoardSizeException
 	 */
 	public function __construct(array $layout, int $rows = 8, int $cols = 8)
@@ -47,6 +50,11 @@ class ChessBoard
 
 	}
 
+	/**
+	 * Builds the chess board based on the provided layout.
+	 *
+	 * @param  array<array<string>>  $layout
+	 */
 	public function build(array $layout): void
 	{
 		for($r = 0; $r < $this->rows; $r++){
