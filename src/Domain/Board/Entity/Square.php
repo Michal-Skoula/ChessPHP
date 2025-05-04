@@ -45,6 +45,16 @@ class Square
 		$this->coords = new Coordinate($row, $col);
 	}
 
+	public function __clone(): void
+	{
+		if($this->hasPiece()) {
+			$this->setPiece(clone $this->piece);
+		}
+		else {
+			$this->setPiece(null);
+		}
+	}
+
 	public function column(bool $coords = false): string|int
 	{
 		return $coords
@@ -59,7 +69,7 @@ class Square
 			: $this->algebraic[1];
 	}
 
-	public function isOccupied(): bool
+	public function hasPiece(): bool
 	{
 		if(! $this->piece()) {
 			return false;

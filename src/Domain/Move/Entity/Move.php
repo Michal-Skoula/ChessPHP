@@ -36,7 +36,7 @@ final class Move
 		$fromSquare = $startingState->getSquare($from);
 		$toSquare = $startingState->getSquare($to);
 
-		if(! $fromSquare->isOccupied()) {
+		if(! $fromSquare->hasPiece()) {
 			throw new InvalidMoveException("From square $fromSquare->algebraic has no piece. The move is invalid.");
 		}
 

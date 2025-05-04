@@ -22,7 +22,7 @@ class ConvertMoveToAlgebraicNotation
 		}
 		else {
 			return "WiP";
-//			if ($to->isOccupied()) {
+//			if ($to->hasPiece()) {
 //				$multiplePiecesOfTheSameTypeAreAttacking = false;
 //
 //				if ($multiplePiecesOfTheSameTypeAreAttacking) {

@@ -29,17 +29,18 @@ $game->playMove('a1', 'a3');
 $game->playMove('a3', 'c6');
 $game->playMove('c6', 'd8');
 
-//$game->getMove(0)->state->visualize();
-//$game->getMove(1)->state->visualize();
-//$game->getMove(2)->state->visualize();
-var_dump($game->moves[0]->state === $game->moves[1]->state);
-Logger::log("Showing move history");
-foreach ($game->moves as $move) {
-	$move->state->visualize();
-	echo "\n";
+$game->getMove(0)->state->visualize();
+$game->getMove(1)->state->visualize();
+$game->getMove(2)->state->visualize();
 
-	var_dump($move->isCapture());
-	var_dump($move->from->getAlgebraic());
-//	var_dump($move->lastMove->to->getAlgebraic());
-
-}
+//var_dump($game->moves[0]->state === $game->moves[1]->state);
+//Logger::log("Showing move history");
+//foreach ($game->moves as $move) {
+//	$move->state->visualize();
+//	echo "\n";
+//
+//	var_dump($move->isCapture());
+//	var_dump($move->from->getAlgebraic());
+////	var_dump($move->lastMove->to->getAlgebraic());
+//
+//}

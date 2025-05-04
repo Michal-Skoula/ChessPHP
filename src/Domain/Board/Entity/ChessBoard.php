@@ -52,6 +52,20 @@ class ChessBoard
 		$this->build($layout);
 	}
 
+	public function __clone(): void
+	{
+		$newPlayArea = [];
+
+		// Indexes start at 1
+		for ($r = 1; $r <= $this->rows; $r++) {
+			for ($c = 1; $c <= $this->cols; $c++) {
+				$newPlayArea[$r][$c] = clone $this->getSquareDirectlyFromBoard($r, $c);
+			}
+		}
+
+		$this->playArea = $newPlayArea;
+	}
+
 	/**
 	 * Builds the chess board based on the provided layout.
 	 * @param  array<array<string>>  $layout
@@ -82,20 +96,14 @@ class ChessBoard
 	 * @param  int  $col
 	 * @return Square
 	 */
-	public function getSquareFromArray(int $row, int $col): Square
+	public function getSquareDirectlyFromBoard(int $row, int $col): Square
 	{
-//		echo ("getSquareFromArray() == row: $row, col: $col \n" );
 		return $this->playArea[$row - 1][$col - 1];
 	}
 
 	public function getSquare(Coordinate $coords): Square
 	{
-		return $this->getSquareFromArray($coords->row, $coords->col);
-	}
-
-	public function getPiece(Coordinate $coords): ?Piece
-	{
-		return $this->getSquareFromArray($coords->row, $coords->col)->piece();
+		return $this->getSquareDirectlyFromBoard($coords->row, $coords->col);
 	}
 
 	/**
@@ -111,9 +119,14 @@ class ChessBoard
 		throw new InvalidSquareException("Square $notation not found on the board.");
 	}
 
+	public function getPiece(Coordinate $coords): ?Piece
+	{
+		return $this->getSquareDirectlyFromBoard($coords->row, $coords->col)->piece();
+	}
+
 	public function setPiece(int $row, int $col, ?Piece $piece): void
 	{
-		$this->getSquareFromArray($row, $col)->setPiece($piece);
+		$this->getSquareDirectlyFromBoard($row, $col)->setPiece($piece);
 	}
 
 	public function setPieceFromCoords(Coordinate $coords, ?Piece $piece): void
@@ -130,7 +143,7 @@ class ChessBoard
 
 		for ($r = 1; $r <= $this->rows; $r++) {
 			for ($c = 1; $c <= $this->cols; $c++) {
-				$squares[] = $this->getSquareFromArray($r,$c);
+				$squares[] = $this->getSquareDirectlyFromBoard($r,$c);
 			}
 		}
 
@@ -151,6 +164,11 @@ class ChessBoard
 
 	public function visualize(): void
 	{
-		visualize($this, true);
+		if(function_exists('visualize')) {
+			visualize($this, true);
+		}
+		else {
+			Logger::log("The visualizer is probably not set as `required`, cannot render", LogLevel::ERROR);
+		}
 	}
 }

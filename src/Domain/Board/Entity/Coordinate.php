@@ -4,7 +4,7 @@ namespace Chess\Domain\Board\Entity;
 
 use Chess\Domain\Board\Service\ColNumberToChar;
 
-class Coordinate
+readonly class Coordinate
 {
 	public int $row;
 	public int $col;

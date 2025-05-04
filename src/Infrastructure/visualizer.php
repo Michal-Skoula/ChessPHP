@@ -9,7 +9,7 @@ if (! function_exists('visualize')) {
 		if($detailed) {
 			echo "\n   ";
 			for($c = 1; $c <= $board->cols; $c++) {
-				echo " {$board->getSquareFromArray(row: 1, col: $c)->column()}";
+				echo " {$board->getSquareDirectlyFromBoard(row: 1, col: $c)->column()}";
 			}
 			echo "\n    ";
 			for($c = 1; $c <= $board->cols; $c++) {
@@ -20,11 +20,11 @@ if (! function_exists('visualize')) {
 		for ($r = 1; $r <= $board->rows; $r++) {
 			// Left border
 			echo $detailed
-				? "\n {$board->getSquareFromArray(row: $r, col: 1)->row()} |"
+				? "\n {$board->getSquareDirectlyFromBoard(row: $r, col: 1)->row()} |"
 				: "\n ";
 
 			for ($c = 1; $c <= $board->rows; $c++) {
-				$square = $board->getSquareFromArray($r, $c);
+				$square = $board->getSquareDirectlyFromBoard($r, $c);
 				$piece = $square->piece();
 
 				echo ($piece ? $piece->icon[$piece->color] : ' ') . ' '; // Pieces
