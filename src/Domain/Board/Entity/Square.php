@@ -37,7 +37,7 @@ class Square
 		$this->id = $id; $id++;
 
 		// Algebraic notation
-		$columnChar = ColNumberToChar::toChar($col - 1);
+		$columnChar = ColNumberToChar::toChar($col);
 		$rowInt = $row;
 		$this->algebraic = "{$columnChar}{$rowInt}";
 

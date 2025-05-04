@@ -50,14 +50,14 @@ final class Move
 		$this->algebraicNotation = ConvertMoveToAlgebraicNotation::convert($this->pieceMoved, $from, $to);
 
 		// Update board state with the move
-		$newState = $startingState;
+		$newState = clone $startingState;
 
 		$newState->setPieceFromCoords($toSquare->coords, $fromSquare->piece());
 		$newState->setPieceFromCoords($fromSquare->coords, null);
 
 		$this->state = $newState;
 
-		$this->state->visualize();
+//		$this->state->visualize();
 
 		Logger::log("Square {$this->getSquare($from)->algebraic} has piece: " . $fromSquare->pieceName(), LogLevel::INFO);
 		Logger::log("Square {$this->getSquare($to)->algebraic} has piece: " . $toSquare->pieceName(), LogLevel::INFO);

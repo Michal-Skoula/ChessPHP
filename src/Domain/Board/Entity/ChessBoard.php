@@ -18,7 +18,7 @@ class ChessBoard
 	 * as there are no more chars to use in the ASCII alphabet.
 	 * @var array{'r': int, 'c': int}
 	 */
-	final array $maxArea = ['r' => 25, 'c' => 25];
+	protected array $maxArea = ['r' => 25, 'c' => 25];
 
 	/**
 	 * Stores the game state

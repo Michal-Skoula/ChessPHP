@@ -12,7 +12,7 @@ class ColNumberToChar
 
 	public static function toChar(int $num): string
 	{
-		return sprintf("%c", self::$startOfAsciiLowercaseAlphabet + $num);
+		return sprintf("%c", self::$startOfAsciiLowercaseAlphabet + $num - 1);
 	}
 
 	public static function toInt(string $char): int

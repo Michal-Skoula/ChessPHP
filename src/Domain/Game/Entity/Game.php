@@ -17,7 +17,7 @@ class Game
 	/**
 	 * @var array<Move>
 	 */
-	protected array $moves = [];
+	public array $moves = [];
 	protected ChessBoard $board;
 
 
@@ -39,7 +39,7 @@ class Game
 		}
 	}
 
-	public function playMove(Coordinate $from, Coordinate $to): void
+	public function playMoveFromCoords(Coordinate $from, Coordinate $to): void
 	{
 		try {
 			$move = new Move($this->board, $from, $to);
@@ -47,6 +47,11 @@ class Game
 			if($move->isValid())
 			{
 				$this->moves[] = $move;
+				$move->state->visualize();
+
+//				if((count($this->moves) - 1) >= 0) {
+//					$move->lastMove = $this->moves[count($this->moves) - 1];
+//				}
 
 				$move->isCapture()
 					? Logger::log("Captured {$move->pieceCaptured->name}", LogLevel::INFO)
@@ -61,12 +66,12 @@ class Game
 		}
 	}
 
-	public function playMoveFromAlgebraic(string $from, string $to): void
+	public function playMove(string $from, string $to): void
 	{
 		$fromCoords = Coordinate::fromAlgebraic($from);
 		$toCoords = Coordinate::fromAlgebraic($to);
 
-		$this->playMove($fromCoords, $toCoords);
+		$this->playMoveFromCoords($fromCoords, $toCoords);
 	}
 
 	public function getSquare(Coordinate $coords): Square
@@ -77,5 +82,11 @@ class Game
 	public function getPiece(Coordinate $coords): ?Piece
 	{
 		return $this->board->getSquare($coords)->piece();
+	}
+
+	public function getMove(int $moveNumber): Move
+	{
+		// TODO: Implement non happy path logic
+		return $this->moves[$moveNumber];
 	}
 }

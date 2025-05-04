@@ -2,15 +2,8 @@
 
 require_once __DIR__ . '/src/Infrastructure/visualizer.php';
 
-use Chess\Domain\Board\Entity\ChessBoard;
-use Chess\Domain\Board\Entity\Coordinate;
-use Chess\Domain\Board\Exception\MaxBoardSizeException;
-use Chess\Domain\Piece\Entity\Rook;
-use Chess\Domain\Piece\ValueObject\Enums\PieceType;
-use Chess\Infrastructure\Logging\Logger;
-use Chess\Infrastructure\Logging\LogLevel;
 use Chess\Domain\Game\Entity\Game;
-
+use Chess\Infrastructure\Logging\Logger;
 
 /**
  * Layout definition from which to construct the chess board.
@@ -32,6 +25,21 @@ $layout = [
 
 $game = new Game($layout);
 
-$game->playMoveFromAlgebraic('a1', 'a3');
-$game->playMoveFromAlgebraic('a3', 'c6');
-$game->playMoveFromAlgebraic('c6', 'd8');
+$game->playMove('a1', 'a3');
+$game->playMove('a3', 'c6');
+$game->playMove('c6', 'd8');
+
+//$game->getMove(0)->state->visualize();
+//$game->getMove(1)->state->visualize();
+//$game->getMove(2)->state->visualize();
+var_dump($game->moves[0]->state === $game->moves[1]->state);
+Logger::log("Showing move history");
+foreach ($game->moves as $move) {
+	$move->state->visualize();
+	echo "\n";
+
+	var_dump($move->isCapture());
+	var_dump($move->from->getAlgebraic());
+//	var_dump($move->lastMove->to->getAlgebraic());
+
+}
