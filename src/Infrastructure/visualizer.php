@@ -8,7 +8,9 @@ if (! function_exists('visualize')) {
 	{
 		// First row labels
 		if($detailed) {
-			echo "\n   ";
+			$spacingRow = $board->cols >= 9 ? "    " : "   ";
+			echo "\n$spacingRow";
+
 			for($c = 0; $c < $board->cols; $c++) {
 				echo " {$board->getSquare(Coordinate::fromCoords(0, $c))->column()}";
 			}
@@ -20,9 +22,14 @@ if (! function_exists('visualize')) {
 
 		for ($r = 0; $r < $board->rows; $r++) {
 			// Left border
-			echo $detailed
-				? "\n {$board->getSquare(Coordinate::fromCoords($r, 0))->row()} |"
-				: "\n ";
+			if($detailed) {
+				$spacingCol =  $r >= 9 ? " " : "  ";
+
+				echo "\n {$board->getSquare(Coordinate::fromCoords($r, 0))->row()}$spacingCol|";
+			}
+			else {
+				echo "\n ";
+			}
 
 			for ($c = 0; $c < $board->rows; $c++) {
 				$square = $board->getSquare(Coordinate::fromCoords($r, $c));

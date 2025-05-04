@@ -53,14 +53,14 @@ class Square
 	{
 		return $asCoordinate
 			? $this->coords->col
-			: $this->algebraic[0];
+			: $this->coords->algebraicCol();
 	}
 
 	public function row(bool $asCoordinate = false): string|int
 	{
 		return $asCoordinate
 			? $this->coords->row
-			: (int)$this->algebraic[1] + 1;
+			: $this->coords->algebraicRow();
 	}
 
 	public function hasPiece(): bool
