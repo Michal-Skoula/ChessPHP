@@ -25,13 +25,13 @@ final class Move
 
 	public Coordinate $from;
 	public Coordinate $to;
-	public Move $lastMove;
-	public Move $nextMove;
+	public ?Move $lastMove;
+	public ?Move $nextMove;
 
 	/**
 	 * @throws InvalidMoveException
 	 */
-	public function __construct(ChessBoard $startingState, Coordinate $from, Coordinate $to)
+	public function __construct(ChessBoard $startingState, Coordinate $from, Coordinate $to, ?Move $lastMove = null)
 	{
 		$fromSquare = $startingState->getSquare($from);
 		$toSquare = $startingState->getSquare($to);
@@ -39,6 +39,10 @@ final class Move
 		if(! $fromSquare->hasPiece()) {
 			throw new InvalidMoveException("From square $fromSquare->algebraic has no piece. The move is invalid.");
 		}
+
+		// Set moves chain
+		$this->lastMove = $lastMove;
+		if($lastMove) $lastMove->nextMove = $this;
 
 		// Set move information
 		$this->from = $from;
@@ -50,19 +54,23 @@ final class Move
 		$this->algebraicNotation = ConvertMoveToAlgebraicNotation::convert($this->pieceMoved, $from, $to);
 
 		// Update board state with the move
-		$newState = clone $startingState;
+		$this->state = $this->getNewState($startingState);
 
-		$newState->setPieceFromCoords($toSquare->coords, $fromSquare->piece());
-		$newState->setPieceFromCoords($fromSquare->coords, null);
-
-		$this->state = $newState;
-
-//		$this->state->visualize();
-
+		// Logging info
+		$this->state->visualize();
 		Logger::log("Square {$this->getSquare($from)->algebraic} has piece: " . $fromSquare->pieceName(), LogLevel::INFO);
 		Logger::log("Square {$this->getSquare($to)->algebraic} has piece: " . $toSquare->pieceName(), LogLevel::INFO);
-
 		Logger::log("Move notation: $this->algebraicNotation", LogLevel::INFO);
+	}
+
+	protected function getNewState(ChessBoard $currentBoardState): ChessBoard
+	{
+		$newState = clone $currentBoardState;
+
+		$newState->setPiece($this->to, $currentBoardState->getPiece($this->from));
+		$newState->setPiece($this->from, null);
+
+		return $newState;
 	}
 
 	public function getSquare(Coordinate $coords): Square

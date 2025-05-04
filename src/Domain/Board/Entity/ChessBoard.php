@@ -7,7 +7,6 @@ use Chess\Domain\Board\Exception\MaxBoardSizeException;
 use Chess\Domain\Board\Service\LayoutCharParser;
 use Chess\Domain\Piece\Entity\Piece;
 use Chess\Domain\Piece\Exception\InvalidPieceException;
-use Chess\Domain\Piece\ValueObject\Enums\PieceType;
 use Chess\Infrastructure\Logging\Logger;
 use Chess\Infrastructure\Logging\LogLevel;
 
@@ -18,7 +17,7 @@ class ChessBoard
 	 * as there are no more chars to use in the ASCII alphabet.
 	 * @var array{'r': int, 'c': int}
 	 */
-	protected array $maxArea = ['r' => 25, 'c' => 25];
+	protected final array $maxArea = ['r' => 25, 'c' => 25];
 
 	/**
 	 * Stores the game state
@@ -56,15 +55,15 @@ class ChessBoard
 	{
 		$newPlayArea = [];
 
-		// Indexes start at 1
-		for ($r = 1; $r <= $this->rows; $r++) {
-			for ($c = 1; $c <= $this->cols; $c++) {
-				$newPlayArea[$r][$c] = clone $this->getSquareDirectlyFromBoard($r, $c);
+		foreach ($this->playArea as $r => $row) {
+			foreach ($row as $c => $square) {
+				$newPlayArea[$r][$c] = clone $square;
 			}
 		}
 
 		$this->playArea = $newPlayArea;
 	}
+
 
 	/**
 	 * Builds the chess board based on the provided layout.
@@ -74,7 +73,7 @@ class ChessBoard
 	{
 		for ($r = 0; $r < $this->rows; $r++) {
 			for ($c = 0; $c < $this->cols; $c++) {
-				$square = new Square($r + 1, $c + 1);
+				$square = new Square($r, $c);
 				$this->playArea[$r][$c] = $square;
 
 				$char = $layout[$r][$c];
@@ -89,16 +88,20 @@ class ChessBoard
 	/**
 	 * Returns a square from the chessboard.
 	 *
-	 * NOTE: indexes start from 1, -1 is subtracted! !!
+	 * Example: `a1 => [row= 1, col= 0]` is translated into `[1,0]`
 	 *
-	 * Example: `a1 => [row= 1, col= 1]` is translated into `[0,0]`
 	 * @param  int  $row
 	 * @param  int  $col
 	 * @return Square
 	 */
-	public function getSquareDirectlyFromBoard(int $row, int $col): Square
+	protected function getSquareDirectlyFromBoard(int $row, int $col): Square
 	{
-		return $this->playArea[$row - 1][$col - 1];
+		return $this->playArea[$row][$col];
+	}
+
+	protected function setPieceFromArray(int $row, int $col, ?Piece $piece): void
+	{
+		$this->getSquareDirectlyFromBoard($row, $col)->setPiece($piece);
 	}
 
 	public function getSquare(Coordinate $coords): Square
@@ -121,17 +124,12 @@ class ChessBoard
 
 	public function getPiece(Coordinate $coords): ?Piece
 	{
-		return $this->getSquareDirectlyFromBoard($coords->row, $coords->col)->piece();
+		return $this->getSquare($coords)->piece();
 	}
 
-	public function setPiece(int $row, int $col, ?Piece $piece): void
+	public function setPiece(Coordinate $coords, ?Piece $piece): void
 	{
-		$this->getSquareDirectlyFromBoard($row, $col)->setPiece($piece);
-	}
-
-	public function setPieceFromCoords(Coordinate $coords, ?Piece $piece): void
-	{
-		$this->setPiece($coords->row, $coords->col, $piece);
+		$this->setPieceFromArray($coords->row, $coords->col, $piece);
 	}
 
 	/**
@@ -141,8 +139,8 @@ class ChessBoard
 	{
 		$squares = [];
 
-		for ($r = 1; $r <= $this->rows; $r++) {
-			for ($c = 1; $c <= $this->cols; $c++) {
+		for ($r = 0; $r < $this->rows; $r++) {
+			for ($c = 0; $c < $this->cols; $c++) {
 				$squares[] = $this->getSquareDirectlyFromBoard($r,$c);
 			}
 		}

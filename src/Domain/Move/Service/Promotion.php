@@ -24,7 +24,7 @@ class Promotion
 //			$pieceClass = $promoteTo->getClassString();
 //			$piece = Piece::make($promoteTo, $this->move->movedBy, true);
 //
-//			$this->move->to->setPiece($piece);
+//			$this->move->to->setPieceFromArray($piece);
 //			return $piece;
 //		}
 //		throw new PromotionException("Can't promote piece, conditions are not met.");

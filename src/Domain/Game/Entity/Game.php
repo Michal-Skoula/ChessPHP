@@ -9,6 +9,7 @@ use Chess\Domain\Board\Exception\MaxBoardSizeException;
 use Chess\Domain\Move\Entity\Move;
 use Chess\Domain\Move\Exception\InvalidMoveException;
 use Chess\Domain\Piece\Entity\Piece;
+use Chess\Domain\Piece\Exception\InvalidPieceException;
 use Chess\Infrastructure\Logging\Logger;
 use Chess\Infrastructure\Logging\LogLevel;
 
@@ -17,7 +18,7 @@ class Game
 	/**
 	 * @var array<Move>
 	 */
-	public array $moves = [];
+	protected array $moves = [];
 	protected ChessBoard $board;
 
 
@@ -30,7 +31,10 @@ class Game
 	{
 		try {
 			$this->board = new ChessBoard($layout, $boardRows, $boardCols);
-//			visualize($this->board, true);
+			visualize($this->board, true);
+//			var_dump($this->board->getSquareFromAlgebraic('a2')->piece());
+//			var_dump($this->board->getSquare(Coordinate::fromAlgebraic('a2'))->piece()); works
+
 
 		}
 		catch (MaxBoardSizeException) {
@@ -41,17 +45,16 @@ class Game
 
 	public function playMoveFromCoords(Coordinate $from, Coordinate $to): void
 	{
+		$lastMove = $this->getMovesCount() !== 0
+			? $this->getMove($this->getMovesCount() - 1)
+			: null;
+
 		try {
-			$move = new Move($this->board, $from, $to);
+			$move = new Move($this->board, $from, $to, $lastMove);
 
 			if($move->isValid())
 			{
-				$this->moves[] = $move;
-				$move->state->visualize();
-
-//				if((count($this->moves) - 1) >= 0) {
-//					$move->lastMove = $this->moves[count($this->moves) - 1];
-//				}
+				$this->addMove($move);
 
 				$move->isCapture()
 					? Logger::log("Captured {$move->pieceCaptured->name}", LogLevel::INFO)
@@ -84,9 +87,31 @@ class Game
 		return $this->board->getSquare($coords)->piece();
 	}
 
+	protected function addMove(Move $move): void
+	{
+		$this->moves[] = $move;
+		$this->board = $move->state; // Updates the state to the latest board state
+
+		Logger::log("New move is being added. Count: " . count($this->moves));
+
+	}
+	public function getMovesCount(): int
+	{
+		return count($this->moves);
+	}
+
+	/**
+	 * Returns a move from the moves[] array
+	 *
+	 * @throws InvalidMoveException
+	 */
 	public function getMove(int $moveNumber): Move
 	{
-		// TODO: Implement non happy path logic
-		return $this->moves[$moveNumber];
+		if($moveNumber < $this->getMovesCount()) {
+			return $this->moves[$moveNumber];
+		}
+		else {
+			throw new InvalidMoveException("The move with index $moveNumber doesn't exist in the game instance.");
+		}
 	}
 }

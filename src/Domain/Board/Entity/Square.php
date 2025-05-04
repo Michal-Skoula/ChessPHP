@@ -14,7 +14,7 @@ class Square
 	public readonly string $algebraic;
 
 	/**
-	 * Piece coordinates in coordinate notation, e.g. `[8,4]. Indexes start at 1.`
+	 * Piece coordinates in coordinate notation, e.g. `[7,0]`.
 	 *
 	 * @var Coordinate $coords
 	 */
@@ -32,17 +32,11 @@ class Square
 
 	public function __construct(int $row, int $col)
 	{
-		// Id
 		static $id = 1;
 		$this->id = $id; $id++;
 
-		// Algebraic notation
-		$columnChar = ColNumberToChar::toChar($col);
-		$rowInt = $row;
-		$this->algebraic = "{$columnChar}{$rowInt}";
-
-		// Coordinates notation
 		$this->coords = new Coordinate($row, $col);
+		$this->algebraic = $this->coords->getAlgebraic();
 	}
 
 	public function __clone(): void
@@ -55,18 +49,18 @@ class Square
 		}
 	}
 
-	public function column(bool $coords = false): string|int
+	public function column(bool $asCoordinate = false): string|int
 	{
-		return $coords
+		return $asCoordinate
 			? $this->coords->col
 			: $this->algebraic[0];
 	}
 
-	public function row(bool $coords = false): string|int
+	public function row(bool $asCoordinate = false): string|int
 	{
-		return $coords
+		return $asCoordinate
 			? $this->coords->row
-			: $this->algebraic[1];
+			: (int)$this->algebraic[1] + 1;
 	}
 
 	public function hasPiece(): bool

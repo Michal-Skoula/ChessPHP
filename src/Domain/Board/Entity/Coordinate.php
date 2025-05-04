@@ -24,7 +24,7 @@ readonly class Coordinate
 
 	public function getAlgebraic(): string
 	{
-		$row = $this->row;
+		$row = $this->row + 1; // a1 is [0,0]
 		$col = $this->getAlgebraicCol();
 
 		return "$col$row";
@@ -42,8 +42,9 @@ readonly class Coordinate
 
 	public static function fromAlgebraic(string $notation): Coordinate
 	{
+//		var_dump(ColNumberToChar::toInt($notation[0]), (int)$notation[1] - 1);
 		$col = ColNumberToChar::toInt($notation[0]);
-		$row = (int)$notation[1];
+		$row = (int)$notation[1] - 1;
 
 		return new Coordinate($row, $col);
 	}
