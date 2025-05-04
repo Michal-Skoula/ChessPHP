@@ -17,22 +17,27 @@ readonly class Coordinate
 	/**
 	 * @return array{'r': int, 'c': int} Returns an array `[row, col]`
 	 */
-	public function getArray(): array
+	public function array(): array
 	{
 		return ['r' => $this->row, 'c' => $this->col];
 	}
 
-	public function getAlgebraic(): string
+	public function algebraic(): string
 	{
 		$row = $this->row + 1; // a1 is [0,0]
-		$col = $this->getAlgebraicCol();
+		$col = $this->algebraicCol();
 
 		return "$col$row";
 	}
 
-	public function getAlgebraicCol(): string
+	public function algebraicCol(): string
 	{
 		return ColNumberToChar::toChar($this->col);
+	}
+
+	public function algebraicRow(): int
+	{
+		return $this->row + 1;
 	}
 
 	public static function fromCoords(int $row, int $col): Coordinate
@@ -42,9 +47,8 @@ readonly class Coordinate
 
 	public static function fromAlgebraic(string $notation): Coordinate
 	{
-//		var_dump(ColNumberToChar::toInt($notation[0]), (int)$notation[1] - 1);
 		$col = ColNumberToChar::toInt($notation[0]);
-		$row = (int)$notation[1] - 1;
+		$row = (int)substr($notation, 1) - 1;
 
 		return new Coordinate($row, $col);
 	}

@@ -36,7 +36,7 @@ class Square
 		$this->id = $id; $id++;
 
 		$this->coords = new Coordinate($row, $col);
-		$this->algebraic = $this->coords->getAlgebraic();
+		$this->algebraic = $this->coords->algebraic();
 	}
 
 	public function __clone(): void

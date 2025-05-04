@@ -2,6 +2,7 @@
 
 require_once __DIR__ . '/src/Infrastructure/visualizer.php';
 
+use Chess\Domain\Board\Entity\Coordinate;
 use Chess\Domain\Game\Entity\Game;
 use Chess\Infrastructure\Logging\Logger;
 
@@ -23,7 +24,7 @@ $layout = [
 	['R','N','B','Q','K','B','N','R'], // 8
 ];
 
-$game = new Game($layout);
+$game = new Game($layout, 12, 12);
 
 $game->playMove('a1', 'a3');
 $game->playMove('a3', 'c6');

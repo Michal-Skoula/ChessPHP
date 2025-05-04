@@ -6,6 +6,7 @@ use Chess\Domain\Board\Entity\ChessBoard;
 use Chess\Domain\Board\Entity\Coordinate;
 use Chess\Domain\Board\Entity\Square;
 use Chess\Domain\Board\Exception\MaxBoardSizeException;
+use Chess\Domain\Board\Exception\SquareOutOfBoundsException;
 use Chess\Domain\Move\Entity\Move;
 use Chess\Domain\Move\Exception\InvalidMoveException;
 use Chess\Domain\Piece\Entity\Piece;
@@ -45,11 +46,11 @@ class Game
 
 	public function playMoveFromCoords(Coordinate $from, Coordinate $to): void
 	{
-		$lastMove = $this->getMovesCount() !== 0
-			? $this->getMove($this->getMovesCount() - 1)
-			: null;
-
 		try {
+			$lastMove = $this->getMovesCount() !== 0
+				? $this->getMove($this->getMovesCount() - 1)
+				: null;
+
 			$move = new Move($this->board, $from, $to, $lastMove);
 
 			if($move->isValid())
@@ -67,19 +68,43 @@ class Game
 		catch (InvalidMoveException) {
 			Logger::log("There is no piece at square {$this->board->getSquare($from)->algebraic}.", LogLevel::WARNING);
 		}
+		catch (SquareOutOfBoundsException) {
+			Logger::log("{$from->algebraic()} or {$to->algebraic()} are out of bounds of the board.", LogLevel::WARNING);
+		}
 	}
 
+	protected function coordsAreInBounds(Coordinate $coords): bool
+	{
+		return $this->board->rows > $coords->row && $this->board->cols > $coords->col;
+	}
+
+	/**
+	 * @throws SquareOutOfBoundsException
+	 */
 	public function playMove(string $from, string $to): void
 	{
 		$fromCoords = Coordinate::fromAlgebraic($from);
 		$toCoords = Coordinate::fromAlgebraic($to);
 
-		$this->playMoveFromCoords($fromCoords, $toCoords);
+		if($this->coordsAreInBounds($fromCoords) && $this->coordsAreInBounds($toCoords)) {
+			$this->playMoveFromCoords($fromCoords, $toCoords);
+		}
+		else {
+			throw new SquareOutOfBoundsException(
+				"Squares {$fromCoords->algebraic()} or {$toCoords->algebraic()} are outside of the chess board."
+			);
+		}
 	}
 
-	public function getSquare(Coordinate $coords): Square
+	public function getSquare(Coordinate $coords): ?Square
 	{
-		return $this->board->getSquare($coords);
+		if($this->coordsAreInBounds($coords)) {
+			return $this->board->getSquare($coords);
+		}
+		else {
+			Logger::log("Square {$coords->algebraic()} is out of bounds of chessboard.", LogLevel::WARNING);
+			return null;
+		}
 	}
 
 	public function getPiece(Coordinate $coords): ?Piece

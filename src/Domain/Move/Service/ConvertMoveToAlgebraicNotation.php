@@ -17,8 +17,8 @@ class ConvertMoveToAlgebraicNotation
 	{
 		if ($pieceType == PieceType::PAWN) {
 			return $from->col != $to->col        	// If the column changes, it must be a capture
-				? "{$to->getAlgebraicCol()}x{$to->getAlgebraic()}"    		// Capture or en passant
-				: "{$to->getAlgebraic()}";                      	// Move
+				? "{$to->algebraicCol()}x{$to->algebraic()}"    		// Capture or en passant
+				: "{$to->algebraic()}";                      	// Move
 		}
 		else {
 			return "WiP";

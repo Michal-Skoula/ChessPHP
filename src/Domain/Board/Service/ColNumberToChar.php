@@ -22,7 +22,7 @@ class ColNumberToChar
 
 	/**
 	 * Takes the ASCII number for the character and subtracts 97,
-	 * which are all the previous characters, leaving the row number indexed from 0.
+	 * which are all the previous characters, leaving the col number indexed from 0.
 	 *
 	 * @param  string  $char
 	 * @return int
