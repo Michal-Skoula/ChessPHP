@@ -10,7 +10,6 @@ use Chess\Domain\Board\Exception\SquareOutOfBoundsException;
 use Chess\Domain\Move\Entity\Move;
 use Chess\Domain\Move\Exception\InvalidMoveException;
 use Chess\Domain\Piece\Entity\Piece;
-use Chess\Domain\Piece\Exception\InvalidPieceException;
 use Chess\Infrastructure\Logging\Logger;
 use Chess\Infrastructure\Logging\LogLevel;
 
@@ -47,8 +46,8 @@ class Game
 	public function playMoveFromCoords(Coordinate $from, Coordinate $to): void
 	{
 		try {
-			$lastMove = $this->getMovesCount() !== 0
-				? $this->getMove($this->getMovesCount() - 1)
+			$lastMove = $this->movesCount() !== 0
+				? $this->lastMove()
 				: null;
 
 			$move = new Move($this->board, $from, $to, $lastMove);
@@ -120,7 +119,17 @@ class Game
 		Logger::log("New move is being added. Count: " . count($this->moves));
 
 	}
-	public function getMovesCount(): int
+
+	public function firstMove(): Move
+	{
+		return $this->moves[0];
+	}
+
+	public function lastMove(): Move
+	{
+		return $this->moves[$this->movesCount() - 1];
+	}
+	public function movesCount(): int
 	{
 		return count($this->moves);
 	}
@@ -132,7 +141,7 @@ class Game
 	 */
 	public function getMove(int $moveNumber): Move
 	{
-		if($moveNumber < $this->getMovesCount()) {
+		if($moveNumber < $this->movesCount()) {
 			return $this->moves[$moveNumber];
 		}
 		else {

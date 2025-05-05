@@ -76,7 +76,7 @@ class ChessBoard
 				$square = new Square($r, $c);
 				$this->playArea[$r][$c] = $square;
 
-				$char = $layout[$r][$c];
+				$char = $layout[$r][$c] ?? null;
 
 				if ($char) {
 					$square->setPiece(self::getPieceFromChar($char));

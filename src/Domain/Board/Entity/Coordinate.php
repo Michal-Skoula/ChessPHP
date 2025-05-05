@@ -4,10 +4,14 @@ namespace Chess\Domain\Board\Entity;
 
 use Chess\Domain\Board\Service\ColNumberToChar;
 
+/**
+ * The main way of communicating with the board about what square you want to exit
+ */
 readonly class Coordinate
 {
 	public int $row;
 	public int $col;
+
 	public function __construct(int $row, int $col)
 	{
 		$this->col = $col;

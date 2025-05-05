@@ -6,6 +6,8 @@ use Chess\Domain\Board\Entity\ChessBoard;
 use Chess\Domain\Board\Entity\Coordinate;
 use Chess\Domain\Board\Entity\Square;
 use Chess\Domain\Move\Exception\InvalidMoveException;
+use Chess\Domain\Move\Exception\NoNextMoveException;
+use Chess\Domain\Move\Exception\NoPreviousMoveException;
 use Chess\Domain\Move\Service\ConvertMoveToAlgebraicNotation;
 use Chess\Domain\Piece\Entity\Piece;
 use Chess\Domain\Piece\ValueObject\Enums\PieceType;
@@ -17,6 +19,7 @@ use Chess\Infrastructure\Logging\LogLevel;
  */
 final class Move
 {
+	public readonly ?int $id;
 	public string $algebraicNotation;
 	public string $movedBy;
 	public ChessBoard $state;
@@ -25,8 +28,8 @@ final class Move
 
 	public Coordinate $from;
 	public Coordinate $to;
-	public ?Move $lastMove;
-	public ?Move $nextMove;
+	protected ?Move $lastMove;
+	protected ?Move $nextMove;
 
 	/**
 	 * @throws InvalidMoveException
@@ -40,11 +43,10 @@ final class Move
 			throw new InvalidMoveException("From square $fromSquare->algebraic has no piece. The move is invalid.");
 		}
 
-		// Set moves chain
-		$this->lastMove = $lastMove;
-		if($lastMove) $lastMove->nextMove = $this;
+		$lastMove?->visualise();
 
 		// Set move information
+		$this->id = $this->setId();
 		$this->from = $from;
 		$this->to = $to;
 
@@ -53,11 +55,14 @@ final class Move
 		$this->pieceCaptured = $toSquare->piece()->type ?? null;
 		$this->algebraicNotation = ConvertMoveToAlgebraicNotation::convert($this->pieceMoved, $from, $to);
 
+		// Chain the moves linked list
+		$this->lastMove = $lastMove;
+		if($lastMove) $lastMove->nextMove = $this;
+
 		// Update board state with the move
 		$this->state = $this->getNewState($startingState);
 
 		// Logging info
-		$this->state->visualize();
 		Logger::log("Square {$this->getSquare($from)->algebraic} has piece: " . $fromSquare->pieceName(), LogLevel::INFO);
 		Logger::log("Square {$this->getSquare($to)->algebraic} has piece: " . $toSquare->pieceName(), LogLevel::INFO);
 		Logger::log("Move notation: $this->algebraicNotation", LogLevel::INFO);
@@ -71,6 +76,39 @@ final class Move
 		$newState->setPiece($this->from, null);
 
 		return $newState;
+	}
+
+	protected function setId(): int
+	{
+		static $count = 0;
+		$count++;
+
+		return $count;
+	}
+
+	/**
+	 * @throws NoPreviousMoveException
+	 */
+	public function previous(): Move
+	{
+		return $this->lastMove ?? throw new NoPreviousMoveException(
+			"The previous move doesn't exist. Are you at the start of the game?"
+		);
+	}
+
+	/**
+	 * @throws NoNextMoveException
+	 */
+	public function next(): Move
+	{
+		return $this->nextMove ?? throw new NoNextMoveException(
+			"The next move doesn't exist. Are you at the end of the game?"
+		);
+	}
+
+	public function visualise(): void
+	{
+		$this->state->visualize();
 	}
 
 	public function getSquare(Coordinate $coords): Square

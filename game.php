@@ -30,6 +30,7 @@ $game->playMove('a1', 'a3');
 $game->playMove('a3', 'c6');
 $game->playMove('c6', 'd8');
 
-$game->getMove(0)->state->visualize();
-$game->getMove(1)->state->visualize();
-$game->getMove(2)->state->visualize();
+$first_move = $game->firstMove();
+var_dump($first_move->visualise());
+var_dump($first_move->next()->visualise());
+var_dump($first_move->next()->previous()->visualise());
