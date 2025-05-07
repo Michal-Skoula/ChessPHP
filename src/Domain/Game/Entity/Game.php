@@ -18,7 +18,7 @@ class Game
 	/**
 	 * @var array<Move>
 	 */
-	protected array $moves = [];
+	public array $moves = [];
 	protected ChessBoard $board;
 
 
@@ -45,36 +45,29 @@ class Game
 
 	public function playMoveFromCoords(Coordinate $from, Coordinate $to): void
 	{
-		try {
-			$lastMove = $this->movesCount() !== 0
-				? $this->lastMove()
-				: null;
+		$lastMove = $this->movesCount() !== 0
+			? $this->lastMove()
+			: null;
 
+		try {
 			$move = new Move($this->board, $from, $to, $lastMove);
 
-			if($move->isValid())
-			{
-				$this->addMove($move);
+			$this->addMove($move);
 
-				$move->isCapture()
-					? Logger::log("Captured {$move->pieceCaptured->name}", LogLevel::INFO)
-					: Logger::log("Moved piece {$move->pieceMoved->name} to {$move->state->getSquare($to)->algebraic}", LogLevel::INFO);
-			}
-			else {
-				Logger::log("Invalid move. Try a different one.", LogLevel::INFO);
-			}
+			// TODO: improve logging, probably implement into Move itself
+//			$move->isCapture()
+//				? Logger::log("Captured {$move->pieceTypeCaptured->name}", LogLevel::INFO)
+//				: Logger::log("Moved piece {$move->pieceTypeMoved->name} to {$move->state->getSquare($to)->algebraic}", LogLevel::INFO);
+
 		}
 		catch (InvalidMoveException) {
-			Logger::log("There is no piece at square {$this->board->getSquare($from)->algebraic}.", LogLevel::WARNING);
-		}
-		catch (SquareOutOfBoundsException) {
-			Logger::log("{$from->algebraic()} or {$to->algebraic()} are out of bounds of the board.", LogLevel::WARNING);
+			Logger::log("Invalid move. Try a different one.", LogLevel::INFO);
 		}
 	}
 
 	protected function coordsAreInBounds(Coordinate $coords): bool
 	{
-		return $this->board->rows > $coords->row && $this->board->cols > $coords->col;
+		return $this->board->isSquareInBoard($coords);
 	}
 
 	/**

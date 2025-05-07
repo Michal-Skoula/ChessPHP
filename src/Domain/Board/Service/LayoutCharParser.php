@@ -35,6 +35,8 @@ class LayoutCharParser
 	 */
 	public function getColor(): string
 	{
-		return strtoupper($this->char) === $this->char ? 'white' : 'black';
+		return strtoupper($this->char) === $this->char
+			? 'white'   // R
+			: 'black';  // r
 	}
 }

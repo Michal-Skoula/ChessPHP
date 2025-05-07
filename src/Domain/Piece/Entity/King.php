@@ -19,7 +19,7 @@ class King extends Piece implements SpecialMoves
 	/**
 	 * @var array<array<int,int>> Array of allowed move geometries.
 	 */
-	protected array $moves = [
+	public array $moveGeometries = [
 		[-1, 1], [0, 1], [1, 1], [-1, 0], [1, 0], [-1, -1], [0, -1], [1, -1]
 	];
 
@@ -29,14 +29,14 @@ class King extends Piece implements SpecialMoves
 	 * Pieces like the knight or king can only move once in their shape *(L for the knight)*,
 	 * but the rook, or bishop can move infinitely to the sides or on a d-pad
 	 */
-	protected int $moveRepetitions = 1;
+	public int $moveRepetitions = 1;
 
 	/**
 	 * @var array<array<int,int>> Array of allowed attack geometries.
 	 *
 	 * If empty, it is the same as `$moves`.
 	 */
-	protected array $attackMoves = [];
+	public array $attackGeometries = [];
 
 	/**
 	 * Amount of times each move can be repeated. `-1` for infinite
@@ -44,17 +44,17 @@ class King extends Piece implements SpecialMoves
 	 * This behaviour doesn't happen in normal chess, as each piece can only attack once `1`.
 	 * Reserved for custom pieces, e.g. multiple captures in checkers.
 	 */
-	protected int $attackMoveRepetitions = 1;
+	public int $attackRepetitions = 1;
 
 	/**
 	 * @var array<string> Name(s) of functions that handle special move logic *like castling*.
 	 */
-	protected array $specialMoves = [];
+	public array $specialMoves = [];
 
 	/**
 	 * @var array<string> Name(s) of functions that handle special attack logic *like en passant*.
 	 */
-	protected array $specialAttackMoves = [];
+	public array $specialAttackMoves = [];
 
 	function setSpecialMoves(): void
 	{

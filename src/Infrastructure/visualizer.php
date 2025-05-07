@@ -8,11 +8,12 @@ if (! function_exists('visualize')) {
 	{
 		// First row labels
 		if($detailed) {
-			$spacingRow = $board->cols >= 9 ? "    " : "   ";
+//			$spacingRow = $board->cols >= 9 ? "    " : "    ";
+			$spacingRow = "    ";
 			echo "\n$spacingRow";
 
 			for($c = 0; $c < $board->cols; $c++) {
-				echo " {$board->getSquare(Coordinate::fromCoords(0, $c))->column()}";
+				echo " {$board->getSquare(Coordinate::fromNums(0, $c))->column()}";
 			}
 			echo "\n    ";
 			for($c = 0; $c < $board->cols; $c++) {
@@ -25,14 +26,14 @@ if (! function_exists('visualize')) {
 			if($detailed) {
 				$spacingCol =  $r >= 9 ? " " : "  ";
 
-				echo "\n {$board->getSquare(Coordinate::fromCoords($r, 0))->row()}$spacingCol|";
+				echo "\n {$board->getSquare(Coordinate::fromNums($r, 0))->row()}$spacingCol|";
 			}
 			else {
 				echo "\n ";
 			}
 
 			for ($c = 0; $c < $board->rows; $c++) {
-				$square = $board->getSquare(Coordinate::fromCoords($r, $c));
+				$square = $board->getSquare(Coordinate::fromNums($r, $c));
 				$piece = $square->piece();
 
 				echo ($piece ? $piece->icon[$piece->color] : ' ') . ' '; // Pieces

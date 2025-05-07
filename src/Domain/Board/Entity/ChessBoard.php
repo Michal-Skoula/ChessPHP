@@ -169,4 +169,11 @@ class ChessBoard
 			Logger::log("The visualizer is probably not set as `required`, cannot render", LogLevel::ERROR);
 		}
 	}
+
+	public function isSquareInBoard(Coordinate $coords): bool
+	{
+		return 	$coords->row < $this->rows && $coords->row >= 0 &&
+				$coords->col < $this->cols && $coords->col >= 0;
+
+	}
 }
