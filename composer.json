@@ -5,7 +5,8 @@
     "license": "MIT",
     "autoload": {
         "psr-4": {
-            "Chess\\": "src/"
+            "Chess\\": "src/",
+            "Tests\\": "tests/"
         }
     },
     "authors": [
@@ -15,9 +16,16 @@
         }
     ],
     "scripts": {
-        "stan": "vendor/bin/phpstan analyse"
+        "stan": "vendor/bin/phpstan analyse",
+        "test": "vendor/bin/pest"
     },
     "require-dev": {
-        "phpstan/phpstan": "^2.1"
+        "phpstan/phpstan": "^2.1",
+        "pestphp/pest": "^3.8"
+    },
+    "config": {
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
     }
 }
