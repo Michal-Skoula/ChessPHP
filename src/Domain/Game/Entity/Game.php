@@ -43,6 +43,11 @@ class Game
 		}
 	}
 
+	public function getValidMoves(Coordinate $square)
+	{
+
+	}
+
 	public function playMoveFromCoords(Coordinate $from, Coordinate $to): void
 	{
 		$lastMove = $this->movesCount() !== 0

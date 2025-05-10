@@ -3,8 +3,10 @@
 require_once __DIR__ . '/src/Infrastructure/visualizer.php';
 require_once __DIR__ . '/src/Infrastructure/helpers.php';
 
+use Chess\Domain\Board\Entity\ChessBoard;
 use Chess\Domain\Board\Entity\Coordinate;
 use Chess\Domain\Game\Entity\Game;
+use Chess\Domain\Move\Service\MovesAsArrayService;
 use Chess\Infrastructure\Logging\Logger;
 
 /**
@@ -25,14 +27,14 @@ $layout = [
 	['R','N','B','Q','K','B','N','R'], // 8
 ];
 
-$game = new Game($layout, 8, 8);
-
-$game->playMove('f2', 'h3');
+//$game = new Game($layout, 8, 8);
+//
+//$game->playMove('f2', 'h3');
 
 //$game->playMove('a3', 'c6');
 //$game->playMove('c6', 'd8');
 
-$first_move = $game->firstMove();
+//$first_move = $game->firstMove();
 //$game->
 
 //visualizeValidMoves($first_move, [0,1]);
@@ -40,3 +42,4 @@ $first_move = $game->firstMove();
 //$first_move->visualise();
 //$first_move->next()->visualise();
 //$first_move->next()->previous()->visualise();
+

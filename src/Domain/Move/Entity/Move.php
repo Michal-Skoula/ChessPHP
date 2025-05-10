@@ -9,6 +9,7 @@ use Chess\Domain\Move\Exception\InvalidMoveException;
 use Chess\Domain\Move\Exception\NoNextMoveException;
 use Chess\Domain\Move\Exception\NoPreviousMoveException;
 use Chess\Domain\Move\Service\ConvertMoveToAlgebraicNotation;
+use Chess\Domain\Move\Service\MovesAsArrayService;
 use Chess\Domain\Piece\Entity\Piece;
 use Chess\Domain\Piece\ValueObject\Enums\PieceType;
 use Chess\Infrastructure\Logging\Logger;
@@ -167,7 +168,7 @@ final class Move
 		/** @var array<string> $rules Array of function names to be used during validation*/
 		$rules = [];
 
-		$movesFound = $this->getAllMovesWithoutValidation();
+		$movesFound = new MovesAsArrayService($this->state, $this->from)->getAllMoves();
 
 		$moves = $movesFound['moves'];
 		$atkMoves = $movesFound['attacks'];
@@ -182,114 +183,6 @@ final class Move
 		return true;
 	}
 
-	/**
-	 * Returns moves that can happen on the chess board from all geometries
-	 *
-	 * @return array{
-	 *   'moves': array<Coordinate>,
-	 *   'attacks': array<Coordinate>
-	 * }
-	 */
-	protected function getAllMovesWithoutValidation(): array
-	{
-		$moves = [];
-		$attacks = [];
-		$pieceBeingMoved = $this->state->getPiece($this->from);
-		$movesAndAttacksAreTheSame = $pieceBeingMoved->moveGeometries === $pieceBeingMoved->attackGeometries;
-
-		foreach($pieceBeingMoved->moveGeometries as $direction) {
-//			Logger::log("== Checking for moves ==");
-			$squaresFound = $this->allMovesInDirection($direction, $pieceBeingMoved->moveRepetitions);
-
-			$moves = array_merge($moves, $squaresFound['moves']);
-		}
-
-		foreach($pieceBeingMoved->attackGeometries as $direction) {
-//			Logger::log("== Checking for attacks ==");
-
-			$squaresFound = $this->allMovesInDirection($direction, $pieceBeingMoved->attackRepetitions, true);
-
-			$attacks = array_merge($attacks, $squaresFound['attacks']);
-		}
-
-		return [
-			'moves' 	=> array_unique($moves),
-			'attacks' 	=> array_unique($attacks)
-		];
-	}
-
-	/**
-	 * @param  array<int,int>  $moveVector
-	 * @param  int $repetitions Number of repetitions for the move. `-1` for infinity.
-	 * @param  bool $attackingMovesOnly Whether to return moves or attacks
-	 *
-	 * @return array{
-	 *   'moves': array<Coordinate>,
-	 *   'attacks': array<Coordinate>,
-	 * }
-	 */
-	protected function allMovesInDirection(array $moveVector, int $repetitions, bool $attackingMovesOnly = false): array
-	{
-		$pieceBeingMoved = $this->getPiece($this->from);
-
-		// Setup
-		$mvCoords = [];
-		$atkCoords = [];
-
-		$cIterator = $pieceBeingMoved->color === 'white' ? $moveVector[0] * -1 : $moveVector[0];
-		$rIterator = $pieceBeingMoved->color === 'white' ? $moveVector[1] * -1 : $moveVector[1];
-
-		$currCoords = Coordinate::fromNums(
-			row: $this->from->row + $rIterator,
-			col: $this->from->col + $cIterator
-		);
-
-		// Computing moves
-		for($i = 0; $i < $repetitions || $repetitions === -1; $i++ ) {
-			if($this->isInsideBoard($currCoords)) {
-//				Logger::log("Current coords: $currCoords");
-
-				$pieceOnCurrCoords = $this->getPiece($currCoords);
-
-				if($pieceOnCurrCoords == null) {
-					// Square is empty; a move
-					if(! $attackingMovesOnly) {
-						$mvCoords[] = $currCoords;
-//						Logger::log("Move");
-					}
-				}
-
-				else if($pieceOnCurrCoords->color != $pieceBeingMoved->color) {
-					// Square has piece of opposite color; an attack
-					if($attackingMovesOnly) {
-						$atkCoords[] = $currCoords;
-//						Logger::log("Capture");
-						break;
-					}
-				}
-
-				else {
-					// Piece is the same color; friendly fire
-					break;
-				}
-
-				$currCoords = Coordinate::fromNums(
-					row: $currCoords->row + $rIterator,
-					col: $currCoords->col + $cIterator
-				);
-			}
-			else {
-				// Outside the chess board
-				break;
-			}
-		}
-
-		return [
-			'moves' 	=> $mvCoords,
-			'attacks' 	=> $atkCoords,
-		];
-	}
-
 	protected function isInsideBoard(Coordinate $coords): bool
 	{
 		return $this->state->isSquareInBoard($coords);
@@ -299,10 +192,6 @@ final class Move
 	{
 		return $this->pieceTypeCaptured != null;
 	}
-
-
-
-
 
 	public function isCheck(): bool
 	{

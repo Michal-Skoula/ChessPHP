@@ -22,7 +22,7 @@ class Pawn extends Piece implements SpecialAttackMoves, SpecialMoves
 	 * @var array<array<int,int>> Array of allowed move geometries.
 	 */
 	public array $moveGeometries = [
-		[0,1]
+		[1,0]
 	];
 
 	/**
@@ -39,7 +39,7 @@ class Pawn extends Piece implements SpecialAttackMoves, SpecialMoves
 	 * If empty, it is the same as `$moves`.
 	 */
 	public array $attackGeometries = [
-		[-1,1], [1,1]
+		[1,-1], [1,1]
 	];
 
 	/**
